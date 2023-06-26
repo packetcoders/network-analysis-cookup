@@ -1,0 +1,17 @@
+---
+nxos:
+  platform: nxos_ssh
+  data:
+    role: spine
+ios:
+  platform: ios
+  data:
+    role: leaf
+junos:
+  platform: junos
+  data:
+    role: leaf
+eos:
+  platform: eos
+  data:
+    role: leaf

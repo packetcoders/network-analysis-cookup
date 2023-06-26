@@ -1,0 +1,3 @@
+nornir==3.3.0
+rich==10.12.0
+python-dotenv==0.21.0

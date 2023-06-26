@@ -1,0 +1,33 @@
+---
+spine1-nxos:
+  hostname: 172.29.151.1
+  groups:
+    - nxos
+spine2-nxos:
+  hostname: 172.29.151.2
+  groups:
+    - nxos
+leaf1-ios:
+  hostname: 172.29.151.3
+  groups:
+    - ios
+leaf2-ios:
+  hostname: 172.29.151.4
+  groups:
+    - ios
+leaf3-junos:
+  hostname: 172.29.151.5
+  groups:
+    - junos
+leaf4-junos:
+  hostname: 172.29.151.6
+  groups:
+    - junos
+leaf5-eos:
+  hostname: 172.29.151.7
+  groups:
+    - eos
+leaf6-eos:
+  hostname: 172.29.151.8
+  groups:
+    - eos
