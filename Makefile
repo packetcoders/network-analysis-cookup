@@ -9,7 +9,7 @@ help:
 
 fmt-chk-black:
 	@echo "## black (check) ##"
-	@-black . --check -c pyproject.toml
+	@-black --check -c pyproject.toml .
 	@echo
 
 fmt-chk-autoflake:
@@ -29,7 +29,7 @@ fmt-chk:   fmt-chk-black fmt-chk-isort fmt-chk-autoflake
 
 fmt-black:
 	@echo "## black ##"
-	@-black . -c pyproject.toml
+	@-black -c pyproject.toml .
 	@echo
 
 fmt-autoflake:

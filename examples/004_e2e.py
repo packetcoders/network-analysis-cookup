@@ -18,9 +18,7 @@ import pandas as pd
 sys.path.append(f"{Path(__file__).parent.parent}")
 
 from dotenv import load_dotenv
-from nornir.core.filter import F
 from nornir.core.task import Result
-from nornir_inspect import nornir_inspect
 from nornir_napalm.plugins.tasks import napalm_get
 
 from examples.config import nr
@@ -33,7 +31,7 @@ nr.inventory.defaults.username = os.getenv("DEVICE_USERNAME")
 nr.inventory.defaults.password = os.getenv("DEVICE_PASSWORD")
 
 # Filter the inventory.
-#nr = nr.filter(~F(role__eq="spine"))
+# nr = nr.filter(~F(role__eq="spine"))
 
 # Create a simple custom Nornir task.
 def nr_task_dataframe_getter(task, getters):
@@ -41,7 +39,9 @@ def nr_task_dataframe_getter(task, getters):
     result = task.run(task=napalm_get, getters=getters)
 
     # Convert the result to a Pandas DataFrame.
-    df = pd.DataFrame.from_dict(result.result["get_interfaces_counters"], orient="index")
+    df = pd.DataFrame.from_dict(
+        result.result["get_interfaces_counters"], orient="index"
+    )
 
     # Move index to a column and rename it.
     df.reset_index(drop=False, inplace=True)
@@ -49,6 +49,7 @@ def nr_task_dataframe_getter(task, getters):
 
     # Return the result.
     return Result(result=df, host=task.host)
+
 
 def dataframe_builder(getter):
     # Run the getter task.
@@ -77,13 +78,14 @@ if __name__ == "__main__":
     # Print the results from our executed tasks.
     df = dataframe_builder("get_interfaces_counters")
 
-    # Print the df based on the index location
+    #df.to_excel("examples/output/e2e_report.xlsx", sheet_name="all", index=False)
+    df_errors = df.query("rx_errors > 0 | tx_errors > 0")
+    df_errors.to_excel("examples/output/e2e_report.xlsx", sheet_name="errors", index=False)
 
     # Check if we are in IPython, an interactive Python shell
     if globals().get("IPython"):
-    # If so, start an embedded IPython session
+        # If so, start an embedded IPython session
         IPython.embed()
     else:
         # Otherwise, start a default interactive Python session
         code.interact(local=dict(globals(), **locals()))
-
