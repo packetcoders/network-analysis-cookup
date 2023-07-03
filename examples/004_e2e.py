@@ -20,7 +20,7 @@ sys.path.append(f"{Path(__file__).parent.parent}")
 from dotenv import load_dotenv
 from nornir.core.task import Result
 from nornir_napalm.plugins.tasks import napalm_get
-
+from rich import print
 from examples.config import nr
 
 # Load the environment variables from the .env file.
@@ -35,30 +35,30 @@ nr.inventory.defaults.password = os.getenv("DEVICE_PASSWORD")
 
 # Create a simple custom Nornir task.
 def nr_task_dataframe_getter(task, getters):
-    # Run the getter task.
+    print(f"{task.host} Run the getter task.")
     result = task.run(task=napalm_get, getters=getters)
 
-    # Convert the result to a Pandas DataFrame.
+    print(f"{task.host} Convert the result to a Pandas DataFrame.")
     df = pd.DataFrame.from_dict(
         result.result["get_interfaces_counters"], orient="index"
     )
 
-    # Move index to a column and rename it.
+    #print("Move index to a column and rename it.")
     df.reset_index(drop=False, inplace=True)
     df.rename(columns={"index": "interface"}, inplace=True)
 
-    # Return the result.
+    #print("Return the result.")
     return Result(result=df, host=task.host)
 
 
 def dataframe_builder(getter):
-    # Run the getter task.
+    print("Run the getter task.")
     result = nr.run(task=nr_task_dataframe_getter, getters=[getter])
 
-    # Explicitly close the connections.
+    print("Explicitly close the connections.")
     nr.close_connections()
 
-    # Loop over each device in the Nornir result.
+    print("Loop over each device in the Nornir result.")
     df_all = []
 
     for device in result:
@@ -66,10 +66,10 @@ def dataframe_builder(getter):
         df = result[device][0].result
         # Add the device name to the DataFrame.
         df.insert(0, "device", device)
-        # Append the DataFrame to the list.
+        #print("Append the DataFrame to the list.")
         df_all.append(df)
 
-    # Concatenate all the DataFrames in the list into a single DataFrame.
+    print("Concatenate all the DataFrames in the list into a single DataFrame.")
     return pd.concat(df_all, ignore_index=True)
 
 

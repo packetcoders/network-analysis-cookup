@@ -1,4 +1,5 @@
 import pandas as pd
+from rich import inspect # for demo
 
 # Create a sample df with three columns
 data = {
@@ -24,3 +25,4 @@ df.query("vrf == 'default' & version > '12.1'")
 # Output the df to various formats
 df.to_excel("examples/output/output.xlsx", index=False)
 df.to_markdown("examples/output/output.md", index=False)
+df.to_csv("examples/output/output.csv", index=False)
